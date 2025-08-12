@@ -1,8 +1,36 @@
-// MIDI Setup
-let midiAccess = null;
+// Note mapping for PC keyboard
+const keyMap = {
+  'a': 'C4', 's': 'D4', 'd': 'E4', 'f': 'F4',
+  'g': 'G4', 'h': 'A4', 'j': 'B4', 'k': 'C5',
+  'w': 'C#4', 'e': 'D#4', 't': 'F#4',
+  'y': 'G#4', 'u': 'A#4'
+};
 
-function onMIDISuccess(midi) {
-  midiAccess = midi;
+// Play note (highlight key)
+function playNote(note) {
+  const key = document.querySelector(`.key[data-note="${note}"]`);
+  if (key) {
+    key.classList.add('active');
+    setTimeout(() => key.classList.remove('active'), 200);
+  }
+}
+
+// Mouse click support
+document.querySelectorAll('.key').forEach(key => {
+  key.addEventListener('mousedown', () => {
+    const note = key.getAttribute('data-note');
+    playNote(note);
+  });
+});
+
+// PC keyboard support
+document.addEventListener('keydown', e => {
+  const note = keyMap[e.key.toLowerCase()];
+  if (note) playNote(note);
+});
+
+// MIDI support
+function onMIDISuccess(midiAccess) {
   document.getElementById("midi-status").textContent = "🎹 MIDI connected!";
   for (let input of midiAccess.inputs.values()) {
     input.onmidimessage = handleMIDIMessage;
@@ -15,29 +43,19 @@ function onMIDIFailure() {
 
 function handleMIDIMessage(event) {
   const [command, note, velocity] = event.data;
-
-  // Note on message (command 144) with velocity > 0
   if (command === 144 && velocity > 0) {
-    logNote(note);
+    const noteName = midiNoteToName(note);
+    playNote(noteName);
   }
 }
 
-function logNote(note) {
-  const noteName = midiNoteToName(note);
-  const log = document.getElementById("midi-log");
-  const entry = document.createElement("div");
-  entry.textContent = `🎵 Played: ${noteName}`;
-  log.prepend(entry);
-}
-
 function midiNoteToName(note) {
-  const notes = ["C", "C♯", "D", "D♯", "E", "F", "F♯", "G", "G♯", "A", "A♯", "B"];
+  const notes = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
   const octave = Math.floor(note / 12) - 1;
   const name = notes[note % 12];
   return `${name}${octave}`;
 }
 
-// Request MIDI access
 if (navigator.requestMIDIAccess) {
   navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
 } else {

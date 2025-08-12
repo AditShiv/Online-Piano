@@ -2,13 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MIDI Piano Input</title>
+  <title>Interactive Piano</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>🎶 MIDI Piano Input Demo</h1>
-  <div id="midi-status">🎹 MIDI not connected</div>
-  <div id="midi-log"></div>
+  <h1>🎹 Interactive Piano</h1>
+  <div id="midi-status">MIDI not connected</div>
+
+  <div class="piano">
+    <!-- White keys -->
+    <div class="key white" data-note="C4">A</div>
+    <div class="key white" data-note="D4">S</div>
+    <div class="key white" data-note="E4">D</div>
+    <div class="key white" data-note="F4">F</div>
+    <div class="key white" data-note="G4">G</div>
+    <div class="key white" data-note="A4">H</div>
+    <div class="key white" data-note="B4">J</div>
+    <div class="key white" data-note="C5">K</div>
+
+    <!-- Black keys -->
+    <div class="key black" data-note="C#4" style="left: 45px;">W</div>
+    <div class="key black" data-note="D#4" style="left: 105px;">E</div>
+    <div class="key black" data-note="F#4" style="left: 225px;">T</div>
+    <div class="key black" data-note="G#4" style="left: 285px;">Y</div>
+    <div class="key black" data-note="A#4" style="left: 345px;">U</div>
+  </div>
 
   <script src="script.js"></script>
 </body>
