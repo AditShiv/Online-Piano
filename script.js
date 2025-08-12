@@ -1,4 +1,4 @@
-// Note mapping for PC keyboard
+// Map keyboard keys to notes
 const keyMap = {
   'a': 'C4', 's': 'D4', 'd': 'E4', 'f': 'F4',
   'g': 'G4', 'h': 'A4', 'j': 'B4', 'k': 'C5',
@@ -6,8 +6,11 @@ const keyMap = {
   'y': 'G#4', 'u': 'A#4'
 };
 
-// Play note (highlight key)
+// Play note and highlight key
 function playNote(note) {
+  const audio = new Audio(`sounds/${note}.mp3`);
+  audio.play();
+
   const key = document.querySelector(`.key[data-note="${note}"]`);
   if (key) {
     key.classList.add('active');
